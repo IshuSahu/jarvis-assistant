@@ -79,23 +79,27 @@ class MainThread(QThread):
             jarvis.terminalPrint("say that again please...")
             self.query = "None"
         return self.query
+    
     # this is Command program start here
-    # def takeCommand_int(self):
-    #     with sr.Microphone() as source:
-    #         r.adjust_for_ambient_noise(source, duration=1)
-    #         jarvis.terminalPrint("Listening...")
-    #         audio = r.listen(source)
-    #     try:
-    #         jarvis.terminalPrint("Recognizing....")
-    #         guess = r.recognize_google(audio, language='en-in')
-    #         jarvis.terminalPrint(f"user said:{guess}\n")
+    def TakeIntCommand(self):
+        with sr.Microphone() as source:
+            r.adjust_for_ambient_noise(source, duration=1)
+            jarvis.terminalPrint("Listening...")
+            audio = r.listen(source)
+        try:
+            jarvis.terminalPrint("Recognizing....")
+            command = r.recognize_google(audio, language='en-in')
+            jarvis.terminalPrint(f"user said: {command}\n")
 
-    #     except Exception as e:
-    #         jarvis.terminalPrint("say that again please...")
-    #         return None
+            # Convert the recognized command to an integer if possible
+            if command.isdigit():
+                return int(command)
+            else:
+                return command
 
-    #     return guess
-
+        except Exception as e:
+            jarvis.terminalPrint("say that again please...")
+            return "None"
 
     def TaskExecution(self):
         WishMee()
@@ -113,8 +117,8 @@ class MainThread(QThread):
             elif ('hello' in self.query) or ('hello jarvis' in self.query):
                 speak("hello sir")
 
-            elif 'jarvis are you there' in self.query:
-                speak("Yes Sir, at your service")
+            elif ('jarvis are you there' in self.query) or ('jarvis you up' in self.query):
+                speak("For you sir, Always!")
 
             elif ('what you do' in self.query) or ('what can you do' in self.query) or ('what task you perform' in self.query):
                 jarvis.terminalPrint("I can perform various tasks, fuctionality which are provided by master sir \n"
@@ -125,27 +129,28 @@ class MainThread(QThread):
             elif 'jarvis who made you' in self.query:
                 speak("Yes Sir, my master build me in AI")
 
-            # elif ('play guessing game' in self.query) or ('number guessing game' in self.query) or ('play game' in self.query):
-            #     speak("Sure, let's play a guessing game.")
-            #     number = random.randint(1, 10)
-            #     guesses = 0
-            #     while True:
-            #         speak("Guess a number between 1 and 10: ")
-            #         guess = self.takeCommand_int()
-            #         if guess is None:
-            #             speak("Sorry, I couldn't understand you. Please try again.")
-            #         elif guess.isdigit():
-            #             guess = int(guess)
-            #             guesses += 1
-            #             if guess == number:
-            #                 speak(f"Congratulations! You guessed the number in {guesses} guesses.")
-            #                 break
-            #             elif guess < number:
-            #                 speak("The number is higher. Guess again.")
-            #             else:
-            #                 speak("The number is lower. Guess again.")
-            #         else:
-            #             speak("Please enter a valid number.")
+
+            elif ('play guessing game' in self.query) or ('number guessing game' in self.query) or ('play game' in self.query):
+                speak("Sure, let's play a guessing game.")
+                jarvis.terminalPrint("Sure, let's play a guessing game.")
+                number = random.randint(1, 10)
+                guesses = 0
+                while True:
+                    speak("Guess a number between 1 and 10: ")
+                    guess = self.TakeIntCommand().lower()
+                    if guess.isdigit():
+                        guess = int(guess)
+                        guesses += 1
+                        if guess == number:
+                            speak(f"Congratulations! You guessed the number in {guesses} guesses.")
+                            break
+                        elif guess < number:
+                            speak("The number is higher. Guess again.")
+                        else:
+                            speak("The number is lower. Guess again.")
+                    else:
+                        speak("Please enter a valid number.")
+
 
 
             elif ('open youtube' in self.query) or ('onine song' in self.query) or ('search youtube' in self.query):
@@ -308,16 +313,17 @@ class Main(QMainWindow):
                 pass
 
     def startTask(self):
+        # change according to your directory:
         self.ui.movie = QtGui.QMovie(
-            "C:\\Users\\Windows\\Desktop\\JarvisGUI\\Images\\jarvis.gif")
+            "F:\\GITHUB\\JarvisGUI\\Images\\jarvis.gif")
         self.ui.label_2.setMovie(self.ui.movie)
         self.ui.movie.start()
         self.ui.movie = QtGui.QMovie(
-            "C:\\Users\\Windows\\Desktop\\JarvisGUI\\Images\\Jlogo.gif")
+            "F:\\GITHUB\\JarvisGUI\\Images\\Jlogo.gif")
         self.ui.label_3.setMovie(self.ui.movie)
         self.ui.movie.start()
         self.ui.movie = QtGui.QMovie(
-            "C:\\Users\\Windows\\Desktop\\JarvisGUI\\Images\\inilializing.gif")
+            "F:\\GITHUB\\JarvisGUI\\Images\\inilializing.gif")
         self.ui.label_4.setMovie(self.ui.movie)
         self.ui.movie.start()
 
