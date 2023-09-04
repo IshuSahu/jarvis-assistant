@@ -106,6 +106,8 @@ class MainThread(QThread):
         while True:
             self.query = self.takeCommand().lower()
             # logic for executing tasks based commd
+            if self.query == "None":
+                self.query = self.takeCommand().lower()
             if 'wikipedia' in self.query:
                 speak("searching in wikipedia....")
                 self.query = self.query.replace("wikipedia", "")
@@ -160,12 +162,12 @@ class MainThread(QThread):
                     f"https://www.youtube.com/search?q={search}")
                 speak('Here is What I found for' + search)
 
-            elif ('open google' in self.query) or('open on google' in self.query) or ('search' in self.query):
-                speak('What do you want to search on google for?')
+            if 'open google' in self.query or 'open on google' in self.query or 'search' in self.query:
+                speak('What do you want to search on Google for?')
                 search = self.takeCommand()
-                webbrowser.open_new_tab(
-                    f"https://www.google.com/search?q={search}")
-                speak('Here is What I found for' + search)
+                webbrowser.open_new_tab(f"https://www.google.com/search?q={search}")
+                speak('Here is what I found for ' + search)
+
 
             elif 'open facebook' in self.query:
                 speak("Openeing facebook")
@@ -279,7 +281,6 @@ class MainThread(QThread):
 startExecution = MainThread()
 
 # This is for ui interface
-
 class Main(QMainWindow):
     def __init__(self):
         super().__init__()
